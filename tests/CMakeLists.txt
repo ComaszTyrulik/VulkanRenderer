@@ -1,0 +1,8 @@
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_UNIT_TESTS)
+	if (BUILD_UNIT_TESTS)
+		add_subdirectory(Unit)
+	endif()
+	if (BUILD_INTEGRATION_TESTS)
+		add_subdirectory(Integration)
+	endif()
+endif()

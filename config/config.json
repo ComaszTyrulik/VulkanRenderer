@@ -1,0 +1,106 @@
+{
+    "default_build_type": "Debug",
+    "cmake_config": {
+        "directory_name": "cmake/config",
+        "config_files": {
+            "dist_filename": "config.cmake.dist",
+            "filename": "config.cmake"
+        },
+        "project": {
+            "name": "BasicCppSetup",
+            "version_major": "0",
+            "version_minor": "0",
+            "version_patch": "1",
+            "name_placeholder": "project_name",
+            "version_major_placeholder": "project_version_major",
+            "version_minor_placeholder": "project_version_minor",
+            "version_patch_placeholder": "project_version_patch"
+        },
+        "targets": {
+            "exe": {
+                "name": "project",
+                "name_placeholder": "exe_target_name",
+                "config_files": {
+                    "dist_filename": "project/config.cmake.dist",
+                    "filename": "project/config.cmake"
+                },
+                "variables": {
+                    "target_cmake_variables_file_path_placeholder": "project_cmake_vars_file_path",
+                    "target_cmake_variables_file_path": "project/vars.txt"
+                },
+                "directories": {
+                    "include_directory_placeholder": "project_include_dir",
+                    "include_directory": "\"${BasicCppSetup_SOURCE_DIR}/include\"",
+                    "source_directory_placeholder": "project_src_dir",
+                    "source_directory": "\"${BasicCppSetup_SOURCE_DIR}/src\""
+                },
+                "headers": {
+                    "base_dir": "${PROJECT_INCLUDE_DIR}/Project",
+                    "files_list_placeholder": "project_headers",
+                    "files": []
+                },
+                "sources": {
+                    "base_dir": "${PROJECT_SRC_DIR}/Project",
+                    "files_list_placeholder": "project_sources",
+                    "files": ["main.cpp"]
+                }
+            },
+            "tests_unit": {
+                "name": "testsunit",
+                "name_placeholder": "unit_tests_target_name",
+                "config_files": {
+                    "dist_filename": "tests/unit/config.cmake.dist",
+                    "filename": "tests/unit/config.cmake"
+                },
+                "variables": {
+                    "target_cmake_variables_file_path_placeholder": "tests_cmake_vars_file_path",
+                    "target_cmake_variables_file_path": "tests/tests_unit_vars.txt"
+                },
+                "directories": {
+                    "include_directory_placeholder": "tests_unit_include_dir",
+                    "include_directory": "\"${BasicCppSetup_SOURCE_DIR}/tests\"",
+                    "source_directory_placeholder": "tests_unit_src_dir",
+                    "source_directory": "\"${BasicCppSetup_SOURCE_DIR}/tests\""
+                },
+                "headers": {
+                    "base_dir": "${TESTS_UNIT_INCLUDE_DIR}",
+                    "files_list_placeholder": "tests_unit_headers",
+                    "files": ["TestSetup.h"]
+                },
+                "sources": {
+                    "base_dir": "${TESTS_UNIT_SRC_DIR}",
+                    "files_list_placeholder": "tests_unit_sources",
+                    "files": ["tests_unit.cpp"]
+                }
+            },
+            "tests_integration": {
+                "name": "testsintegration",
+                "name_placeholder": "integration_tests_target_name",
+                "config_files": {
+                    "dist_filename": "tests/integration/config.cmake.dist",
+                    "filename": "tests/integration/config.cmake"
+                },
+                "variables": {
+                    "target_cmake_variables_file_path_placeholder": "tests_cmake_vars_file_path",
+                    "target_cmake_variables_file_path": "tests/tests_integration_vars.txt"
+                },
+                "directories": {
+                    "include_directory_placeholder": "tests_integration_include_dir",
+                    "include_directory": "\"${BasicCppSetup_SOURCE_DIR}/tests\"",
+                    "source_directory_placeholder": "tests_integration_src_dir",
+                    "source_directory": "\"${BasicCppSetup_SOURCE_DIR}/tests\""
+                },
+                "headers": {
+                    "base_dir": "${TESTS_INTEGRATION_INCLUDE_DIR}",
+                    "files_list_placeholder": "tests_integration_headers",
+                    "files": ["TestSetup.h"]
+                },
+                "sources": {
+                    "base_dir": "${TESTS_INTEGRATION_SRC_DIR}",
+                    "files_list_placeholder": "tests_integration_sources",
+                    "files": ["tests_integration.cpp"]
+                }
+            }
+        }
+    }
+}

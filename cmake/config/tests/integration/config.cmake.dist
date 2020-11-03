@@ -1,0 +1,18 @@
+set(TESTS_INTEGRATION_INCLUDE_DIR {tests_integration_include_dir})
+set(TESTS_INTEGRATION_SRC_DIR {tests_integration_src_dir})
+
+set(
+	TESTS_INTEGRATION_HEADERS_LIST
+	{tests_integration_headers}
+)
+set(
+	TESTS_INTEGRATION_SRC_LIST
+	{tests_integration_sources}
+)
+
+file(
+	WRITE
+	{tests_cmake_vars_file_path}
+	"\$\{{TESTS_INTEGRATION_INCLUDE_DIR\}}=${{TESTS_INTEGRATION_INCLUDE_DIR}}\n"
+	"\$\{{TESTS_INTEGRATION_SRC_DIR\}}=${{TESTS_INTEGRATION_SRC_DIR}}"
+)
