@@ -7,7 +7,7 @@
             "filename": "config.cmake"
         },
         "project": {
-            "name": "BasicCppSetup",
+            "name": "VulkanRenderer",
             "version_major": "0",
             "version_minor": "0",
             "version_patch": "1",
@@ -18,7 +18,7 @@
         },
         "targets": {
             "exe": {
-                "name": "project",
+                "name": "vulkan_renderer",
                 "name_placeholder": "exe_target_name",
                 "config_files": {
                     "dist_filename": "project/config.cmake.dist",
@@ -30,19 +30,30 @@
                 },
                 "directories": {
                     "include_directory_placeholder": "project_include_dir",
-                    "include_directory": "\"${BasicCppSetup_SOURCE_DIR}/include\"",
+                    "include_directory": "\"${VulkanRenderer_SOURCE_DIR}/include\"",
                     "source_directory_placeholder": "project_src_dir",
-                    "source_directory": "\"${BasicCppSetup_SOURCE_DIR}/src\""
+                    "source_directory": "\"${VulkanRenderer_SOURCE_DIR}/src\""
                 },
                 "headers": {
-                    "base_dir": "${PROJECT_INCLUDE_DIR}/Project",
+                    "base_dir": "${PROJECT_INCLUDE_DIR}/VulkanRenderer",
                     "files_list_placeholder": "project_headers",
-                    "files": []
+                    "files": [
+                        "Application.h",
+                        "Vulkan/Initializer.h",
+                        "Vulkan/Instance.h",
+                        "Vulkan/Device.h"
+                    ]
                 },
                 "sources": {
-                    "base_dir": "${PROJECT_SRC_DIR}/Project",
+                    "base_dir": "${PROJECT_SRC_DIR}/VulkanRenderer",
                     "files_list_placeholder": "project_sources",
-                    "files": ["main.cpp"]
+                    "files": [
+                        "main.cpp",
+                        "Application.cpp",
+                        "Vulkan/Initializer.cpp",
+                        "Vulkan/Instance.cpp",
+                        "Vulkan/Device.cpp"
+                    ]
                 }
             },
             "tests_unit": {
@@ -58,19 +69,23 @@
                 },
                 "directories": {
                     "include_directory_placeholder": "tests_unit_include_dir",
-                    "include_directory": "\"${BasicCppSetup_SOURCE_DIR}/tests\"",
+                    "include_directory": "\"${VulkanRenderer_SOURCE_DIR}/tests\"",
                     "source_directory_placeholder": "tests_unit_src_dir",
-                    "source_directory": "\"${BasicCppSetup_SOURCE_DIR}/tests\""
+                    "source_directory": "\"${VulkanRenderer_SOURCE_DIR}/tests\""
                 },
                 "headers": {
                     "base_dir": "${TESTS_UNIT_INCLUDE_DIR}",
                     "files_list_placeholder": "tests_unit_headers",
-                    "files": ["TestSetup.h"]
+                    "files": [
+                        "TestSetup.h"
+                    ]
                 },
                 "sources": {
                     "base_dir": "${TESTS_UNIT_SRC_DIR}",
                     "files_list_placeholder": "tests_unit_sources",
-                    "files": ["tests_unit.cpp"]
+                    "files": [
+                        "tests_unit.cpp"
+                    ]
                 }
             },
             "tests_integration": {
@@ -86,19 +101,23 @@
                 },
                 "directories": {
                     "include_directory_placeholder": "tests_integration_include_dir",
-                    "include_directory": "\"${BasicCppSetup_SOURCE_DIR}/tests\"",
+                    "include_directory": "\"${VulkanRenderer_SOURCE_DIR}/tests\"",
                     "source_directory_placeholder": "tests_integration_src_dir",
-                    "source_directory": "\"${BasicCppSetup_SOURCE_DIR}/tests\""
+                    "source_directory": "\"${VulkanRenderer_SOURCE_DIR}/tests\""
                 },
                 "headers": {
                     "base_dir": "${TESTS_INTEGRATION_INCLUDE_DIR}",
                     "files_list_placeholder": "tests_integration_headers",
-                    "files": ["TestSetup.h"]
+                    "files": [
+                        "TestSetup.h"
+                    ]
                 },
                 "sources": {
                     "base_dir": "${TESTS_INTEGRATION_SRC_DIR}",
                     "files_list_placeholder": "tests_integration_sources",
-                    "files": ["tests_integration.cpp"]
+                    "files": [
+                        "tests_integration.cpp"
+                    ]
                 }
             }
         }

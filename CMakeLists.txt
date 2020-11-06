@@ -14,6 +14,9 @@ project(${PROJECT_NAME}
 include("${CMAKE_BINARY_DIR}/conanbuildinfo_multi.cmake")
 conan_basic_setup(TARGETS) # Configure Conan, but do not let it override output directories
 
+# Add Vulkan
+find_package(Vulkan REQUIRED)
+
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	set(CMAKE_INSTALL_PREFIX "${${PROJECT_NAME}_SOURCE_DIR}")
 	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
