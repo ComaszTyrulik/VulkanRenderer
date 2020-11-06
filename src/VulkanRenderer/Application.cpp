@@ -42,7 +42,7 @@ namespace vr
 
     void Application::MainLoop()
     {
-        const auto device = m_instance->CreateDevice();
+        const auto device = m_instance->CreateDevice(m_window);
         while (!glfwWindowShouldClose(m_window))
         {
             glfwPollEvents();

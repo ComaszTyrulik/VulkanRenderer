@@ -9,9 +9,11 @@ namespace vr
     const bool VR_ENABLE_VALIDATION_LAYERS = true;
     static const std::vector<const char*> VR_VALIDATION_LAYERS = {"VK_LAYER_KHRONOS_validation"};
 #else
-    const bool ENABLE_VALIDATION_LAYERS = false;
+    const bool VR_ENABLE_VALIDATION_LAYERS = false;
     static const std::vector<const char*> VR_VALIDATION_LAYERS = {};
 #endif
+
+    static const std::vector<const char*> VR_REQUIRED_DEVICE_EXTENSIONS = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};
 
     Instance::Instance(const std::string& appName)
     {
@@ -49,9 +51,13 @@ namespace vr
         spdlog::info("SURFACE CREATION ENDED\n");
     }
 
-    std::unique_ptr<Device> Instance::CreateDevice()
+    std::unique_ptr<Device> Instance::CreateDevice(GLFWwindow* window)
     {
-        return std::make_unique<Device>(GetValidPhysicalDevice());
+        const auto physicalDevice = GetValidPhysicalDevice();
+        auto device = std::make_unique<Device>(physicalDevice, VR_REQUIRED_DEVICE_EXTENSIONS);
+        device->CreateSwapChain(QuerySwapChainSupport(physicalDevice.first), window, m_surface);
+
+        return device;
     }
 
     /***********************************
@@ -143,7 +149,7 @@ namespace vr
         for (const auto& device : presentDevices)
         {
             auto deviceQueueFamilies = GetDeviceQueueFamilies(device);
-            if (AreDeviceQueueFamiliesSupported(deviceQueueFamilies))
+            if (AreDeviceQueueFamiliesSupported(deviceQueueFamilies) && DoesDeviceSupportRequiredExtensions(device))
             {
                 return std::make_pair(device, std::move(deviceQueueFamilies));
             }
@@ -166,22 +172,59 @@ namespace vr
             // Check support for graphics queue
             if (availableFamilies[index].queueFlags & vk::QueueFlagBits::eGraphics)
             {
-                deviceFamilies.graphicsFamilly = index;
+                deviceFamilies.graphicsFamily = index;
             }
 
             // Check support for presentation queue
             if (device.getSurfaceSupportKHR(index, m_surface))
             {
-                deviceFamilies.presentationFamilly = index;
+                deviceFamilies.presentationFamily = index;
             }
         }
 
         return deviceFamilies;
     }
 
+    bool Instance::IsDeviceSuitable(const vk::PhysicalDevice& device, const QueueFamilies& deviceQueueFamilies)
+    {
+        const auto swapChainSupport = QuerySwapChainSupport(device);
+        bool isSwapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
+
+        return AreDeviceQueueFamiliesSupported(deviceQueueFamilies) && DoesDeviceSupportRequiredExtensions(device) && isSwapChainAdequate;
+    }
+
+    SwapChainSupportDetails Instance::QuerySwapChainSupport(const vk::PhysicalDevice& device)
+    {
+        SwapChainSupportDetails details;
+        details.capabilities = device.getSurfaceCapabilitiesKHR(m_surface);
+        details.formats = device.getSurfaceFormatsKHR(m_surface);
+        details.presentModes = device.getSurfacePresentModesKHR(m_surface);
+
+        return details;
+    }
+
     bool Instance::AreDeviceQueueFamiliesSupported(const QueueFamilies& deviceQueueFamilies)
     {
-        return deviceQueueFamilies.graphicsFamilly.has_value() && deviceQueueFamilies.presentationFamilly.has_value();
+        return deviceQueueFamilies.graphicsFamily.has_value() && deviceQueueFamilies.presentationFamily.has_value();
+    }
+
+    bool Instance::DoesDeviceSupportRequiredExtensions(const vk::PhysicalDevice& device)
+    {
+        const auto availableExtensions = device.enumerateDeviceExtensionProperties();
+        for (const auto* requiredExtension : VR_REQUIRED_DEVICE_EXTENSIONS)
+        {
+            const auto foundIt =
+                std::find_if(availableExtensions.begin(), availableExtensions.end(), [&](const vk::ExtensionProperties& extension) {
+                    return (strcmp(extension.extensionName, requiredExtension) == 0);
+                });
+
+            if (foundIt == availableExtensions.end())
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     VKAPI_ATTR VkBool32 VKAPI_CALL Instance::DebugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData)
@@ -199,6 +242,7 @@ namespace vr
             break;
         case vk::DebugUtilsMessageSeverityFlagBitsEXT::eError:
             spdlog::error("Vulkan has triggered an error: {}", pCallbackData->pMessage);
+            DebugBreak();
             break;
         }
 
