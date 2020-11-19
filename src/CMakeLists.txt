@@ -26,3 +26,8 @@ target_precompile_headers(
 		<unordered_map>
 		<map>
 )
+
+configure_file(
+	"${PROJECT_INCLUDE_DIR}/VulkanRenderer/Paths.h.in"
+	"${PROJECT_INCLUDE_DIR}/VulkanRenderer/Paths.h"
+)

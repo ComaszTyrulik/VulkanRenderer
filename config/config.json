@@ -40,8 +40,9 @@
                     "files": [
                         "Application.h",
                         "Vulkan/Initializer.h",
-                        "Vulkan/Instance.h",
-                        "Vulkan/Device.h"
+                        "Paths.h",
+                        "Vulkan/Shader.h",
+                        "Vulkan/Vulkan.h"
                     ]
                 },
                 "sources": {
@@ -51,8 +52,8 @@
                         "main.cpp",
                         "Application.cpp",
                         "Vulkan/Initializer.cpp",
-                        "Vulkan/Instance.cpp",
-                        "Vulkan/Device.cpp"
+                        "Vulkan/Shader.cpp",
+                        "Vulkan/Vulkan.cpp"
                     ]
                 }
             },

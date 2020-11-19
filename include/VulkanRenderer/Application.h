@@ -1,6 +1,6 @@
 #pragma once
 #include "VulkanRenderer/Vulkan/Initializer.h"
-#include "VulkanRenderer/Vulkan/Instance.h"
+#include "VulkanRenderer/Vulkan/Vulkan.h"
 
 #include <GLFW/glfw3.h>
 
@@ -23,7 +23,7 @@ namespace vr
 
     private:
         VulkanInitializer m_vulkanInitializer;
-        std::unique_ptr<Instance> m_instance;
+        std::unique_ptr<Vulkan> m_vulkan;
         GLFWwindow* m_window;
         
         const int WINDOW_WIDTH;

@@ -34,19 +34,37 @@ namespace vr
 
     void Application::InitVulkan()
     {
-        m_instance = m_vulkanInitializer.CreateInstance("Vulkan Hello Triangle");
-        m_instance->CreateSurface(m_window);
-
+        m_vulkan = m_vulkanInitializer.Init("Vulkan Hello Triangle", m_window);
         m_vulkanInitializer.ListAvailableVulkanExtensions();
+
+        m_vulkan->CreateInstance();
+        m_vulkan->CreateSurface();
+        m_vulkan->CreateLogicalDevice();
+        
+        const auto vertexShader = m_vulkan->CreateShader("vert.spv", vr::ShaderType::VR_VERTEX_SHADER);
+        const auto fragmentShader = m_vulkan->CreateShader("frag.spv", vr::ShaderType::VR_FRAGMENT_SHADER);
+
+        m_vulkan->CreateSwapChain();
+        m_vulkan->CreateImageViews();
+        m_vulkan->CreateRenderPass();
+        m_vulkan->CreateGraphicsPipeline(vertexShader, fragmentShader);
+        m_vulkan->CreateFramebuffers();
+        m_vulkan->CreateCommandPool();
+        m_vulkan->CreateCommandBuffers();
+        m_vulkan->CreateSyncObjects();
+
+        spdlog::info("APP IS UP AN RUNNING");
     }
 
     void Application::MainLoop()
     {
-        const auto device = m_instance->CreateDevice(m_window);
         while (!glfwWindowShouldClose(m_window))
         {
             glfwPollEvents();
+            m_vulkan->DrawFrame();
         }
+        
+        m_vulkan->WaitForDevice();
     }
 
     void Application::Cleanup()

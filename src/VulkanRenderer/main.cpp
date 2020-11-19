@@ -20,9 +20,10 @@ int main(int, char**)
     }
     catch (const std::exception& e)
     {
-        spdlog::error(e.what());
+        spdlog::error("An exception occurred during program runtime. Details: {}", e.what());
         return EXIT_FAILURE;
     }
+    spdlog::info("Application terminated successfully");
 
     return EXIT_SUCCESS;
 }

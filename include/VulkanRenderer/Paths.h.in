@@ -1,0 +1,7 @@
+#pragma once
+
+#define VK_SOURCE_DIRECTORY "@CMAKE_SOURCE_DIR@"
+#define VK_RESOURCES_DIRECTORY "@CMAKE_SOURCE_DIR@/res"
+#define VK_SHADERS_DIRECTORY std::string(VK_RESOURCES_DIRECTORY) + std::string("/Shaders/")
+
+#define VK_GET_SHADER_PATH(shaderFilename) VK_SHADERS_DIRECTORY + "/" + shaderFilename

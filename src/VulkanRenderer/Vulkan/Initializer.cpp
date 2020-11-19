@@ -17,8 +17,8 @@ namespace vr
         }
     }
     
-    std::unique_ptr<Instance> VulkanInitializer::CreateInstance(const std::string& appName)
+    std::unique_ptr<Vulkan> VulkanInitializer::Init(const std::string& appName, GLFWwindow* window)
     {
-        return std::make_unique<Instance>(appName);
+        return std::make_unique<Vulkan>(appName, window);
     }
 } // namespace vr

@@ -1,6 +1,6 @@
 #pragma once
 #include <vulkan/vulkan.hpp>
-#include "VulkanRenderer/Vulkan/Instance.h"
+#include "VulkanRenderer/Vulkan/Vulkan.h"
 
 namespace vr
 {
@@ -8,6 +8,6 @@ namespace vr
     {
     public:
         void ListAvailableVulkanExtensions();
-        std::unique_ptr<Instance> CreateInstance(const std::string& appName);
+        std::unique_ptr<Vulkan> Init(const std::string& appName, GLFWwindow* window);
     };
 } // namespace vr
