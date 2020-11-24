@@ -42,7 +42,8 @@
                         "Vulkan/Initializer.h",
                         "Paths.h",
                         "Vulkan/Shader.h",
-                        "Vulkan/Vulkan.h"
+                        "Vulkan/Vulkan.h",
+                        "Vendors/tiny_obj_loader.h"
                     ]
                 },
                 "sources": {

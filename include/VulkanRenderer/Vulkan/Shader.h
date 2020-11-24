@@ -14,7 +14,7 @@ namespace vr
     {
     public:
         Shader(const std::string& shaderName, const vk::UniqueDevice& device, ShaderType type);
-        vk::PipelineShaderStageCreateInfo GetPipelineShaderStageInfo();
+        vk::PipelineShaderStageCreateInfo GetPipelineShaderStageInfo() const;
 
     private:
         std::vector<char> LoadCode(const std::string& filename);

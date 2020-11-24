@@ -17,7 +17,7 @@ namespace vr
         spdlog::info("{} SHADER CREATION ENDED\n", shaderName);
     }
 
-    vk::PipelineShaderStageCreateInfo Shader::GetPipelineShaderStageInfo()
+    vk::PipelineShaderStageCreateInfo Shader::GetPipelineShaderStageInfo() const
     {
         return vk::PipelineShaderStageCreateInfo({}, m_shaderType, m_shaderModule.get(), "main");
     }

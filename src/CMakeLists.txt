@@ -5,7 +5,7 @@ target_include_directories(${PROJECT_EXE_TARGET_NAME} PUBLIC "${PROJECT_INCLUDE_
 target_compile_features(${PROJECT_EXE_TARGET_NAME} PUBLIC cxx_std_17)
 
 # Add linking to libraries from Conan
-target_link_libraries(${PROJECT_EXE_TARGET_NAME} CONAN_PKG::spdlog CONAN_PKG::glm CONAN_PKG::glfw Vulkan::Vulkan)
+target_link_libraries(${PROJECT_EXE_TARGET_NAME} CONAN_PKG::spdlog CONAN_PKG::glm CONAN_PKG::glfw Vulkan::Vulkan CONAN_PKG::stb)
 
 # Group files into proper folders - for IDE
 GROUP_FILES("${PROJECT_HEADERS_LIST}" "${PROJECT_INCLUDE_DIR}")

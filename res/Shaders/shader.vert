@@ -1,21 +1,23 @@
 #version 450
 
-layout(location = 0) out vec4 fragColor;
+layout(location = 0) in vec3 inPosition;
+layout(location = 1) in vec3 inColor;
+layout(location = 2) in vec2 inTexCoords;
 
-vec3 vertexPositions[3] = vec3[](
-    vec3(-0.5, -0.5, 0.0),
-    vec3(0.5, -0.5, 0.0),
-    vec3(0.0, 0.5, 0.0)
-);
+layout(location = 0) out vec3 fragColor;
+layout(location = 1) out vec2 fragTexCoords;
 
-vec4 vertexColor[3] = vec4[](
-    vec4(1.0, 0.0, 0.0, 1.0),
-    vec4(0.0, 1.0, 0.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0)
-);
+layout(binding = 0) uniform UBO
+{
+    mat4 model;
+    mat4 view;
+    mat4 projection;
+} ubo;
 
 void main()
 {
-    fragColor = vertexColor[gl_VertexIndex];
-    gl_Position = vec4(vertexPositions[gl_VertexIndex], 1.0);
+    gl_Position = ubo.projection * ubo.view * ubo.model * vec4(inPosition, 1.0);
+    
+    fragColor = inColor;
+    fragTexCoords = inTexCoords;
 }
