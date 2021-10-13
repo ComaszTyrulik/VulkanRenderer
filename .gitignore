@@ -379,3 +379,5 @@ include/Common/Resources.h
 docs/api
 tests/DbConfig.h
 temp/
+include/VulkanRenderer/Paths.h
+!res/Models/*

@@ -37,8 +37,10 @@ namespace vr
     const bool VR_ENABLE_VALIDATION_LAYERS = true;
     static const std::vector<const char*> VR_VALIDATION_LAYERS = {"VK_LAYER_KHRONOS_validation"};
 #else
-    const bool VR_ENABLE_VALIDATION_LAYERS = false;
-    static const std::vector<const char*> VR_VALIDATION_LAYERS = {};
+    // Those should be disabled in Release builds, but there's some access violation when those are disabled
+    // So I will keep them enabled for now
+    const bool VR_ENABLE_VALIDATION_LAYERS = true;
+    static const std::vector<const char*> VR_VALIDATION_LAYERS = {"VK_LAYER_KHRONOS_validation"};
 #endif
 
     static const std::vector<const char*> VR_REQUIRED_DEVICE_EXTENSIONS = {
@@ -1320,11 +1322,19 @@ namespace vr
     {
         WaitForDevice();
 
-        for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+        for (const auto& semaphore : m_imageAvailableSemaphores)
         {
-            m_logicalDevice->destroySemaphore(m_imageAvailableSemaphores[i]);
-            m_logicalDevice->destroySemaphore(m_renderFinishedSemaphores[i]);
-            m_logicalDevice->destroyFence(m_inFlightFences[i]);
+            m_logicalDevice->destroySemaphore(semaphore);
+        }
+
+        for (const auto& semaphore : m_renderFinishedSemaphores)
+        {
+            m_logicalDevice->destroySemaphore(semaphore);
+        }
+
+        for (const auto& fence : m_inFlightFences)
+        {
+            m_logicalDevice->destroyFence(fence);
         }
 
         CleanupSwapChain();
