@@ -1,8 +1,0 @@
-SET(PROJECT_NAME {project_name})
-SET(PROJECT_VERSION_MAJOR {project_version_major})
-SET(PROJECT_VERSION_MINOR {project_version_minor})
-SET(PROJECT_VERSION_PATCH {project_version_patch})
-
-SET(PROJECT_EXE_TARGET_NAME {exe_target_name})
-SET(PROJECT_UNIT_TESTS_TARGET_NAME {unit_tests_target_name})
-SET(PROJECT_INTEGRATION_TESTS_TARGET_NAME {integration_tests_target_name})

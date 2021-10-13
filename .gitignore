@@ -368,8 +368,14 @@ build/
 .idea/
 
 ## Others
-scripts/src/config/temp.json
-cmake/config/**/config.cmake
-cmake/config/config.cmake
-cmake/config/**/*_vars.txt
-cmake/config/**/vars.txt
+conan/build/*
+imgui.ini
+vendor/ImGui/imgui/*
+todo.txt
+run.bat
+include/BrainApi/Exports.h
+include/Common/Resources.h
+*.md.backup
+docs/api
+tests/DbConfig.h
+temp/

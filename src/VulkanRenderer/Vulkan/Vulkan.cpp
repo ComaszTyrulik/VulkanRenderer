@@ -20,6 +20,17 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <VulkanRenderer/Vendors/tiny_obj_loader.h>
 
+#ifndef VK_CHECK_FENCES_WAIT_RESULT
+    #define VK_CHECK_FENCES_WAIT_RESULT(x)                                                 \
+        {                                                                         \
+            const auto result = x;                                                \
+            if (result != vk::Result::eSuccess && result != vk::Result::eTimeout) \
+            {                                                                     \
+                throw std::runtime_error("Wait for fences error!");               \
+            }                                                                     \
+        }
+#endif
+
 namespace vr
 {
 #ifndef NDEBUG
@@ -251,7 +262,7 @@ namespace vr
             colorAttachmentResolve.stencilStoreOp = vk::AttachmentStoreOp::eDontCare;
             colorAttachmentResolve.initialLayout = vk::ImageLayout::eUndefined;
             colorAttachmentResolve.finalLayout = vk::ImageLayout::ePresentSrcKHR;
-            
+
             vk::AttachmentReference colorAttachmentResolveRef;
             colorAttachmentResolveRef.attachment = 2;
             colorAttachmentResolveRef.layout = vk::ImageLayout::eColorAttachmentOptimal;
@@ -275,7 +286,7 @@ namespace vr
             std::array<vk::AttachmentDescription, 3> attachments = {colorAttachment, depthAttachment, colorAttachmentResolve};
             vk::RenderPassCreateInfo renderPassCreateInfo;
             renderPassCreateInfo
-                .setAttachments(attachments )
+                .setAttachments(attachments)
                 .setSubpasses(subpassDescription)
                 .setDependencies(subpassDependency);
 
@@ -467,14 +478,13 @@ namespace vr
                 vk::ClearColorValue clearColorValue;
                 clearColorValue.setFloat32({0.0f, 0.0f, 0.0f, 1.0f});
                 vk::ClearDepthStencilValue clearDepthStencilValue(1.0f, 0.0f);
-                
+
                 std::array<vk::ClearValue, 2> clearValues = {clearColorValue, clearDepthStencilValue};
                 vk::RenderPassBeginInfo renderPassBeginInfo(
                     m_renderPass,
                     m_swapChainFramebuffers[i],
                     vk::Rect2D({0, 0}, m_swapChainImagesExtent),
-                    clearValues
-                );
+                    clearValues);
 
                 commandBuffer.beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
                 {
@@ -524,8 +534,8 @@ namespace vr
             imageSize,
             vk::BufferUsageFlagBits::eTransferSrc,
             vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
-            imageStagingBuffer, imageStagingBufferMemory
-        );
+            imageStagingBuffer,
+            imageStagingBufferMemory);
 
         void* data = m_logicalDevice->mapMemory(imageStagingBufferMemory, 0, imageSize);
         memcpy(data, pixels, static_cast<std::size_t>(imageSize));
@@ -542,8 +552,7 @@ namespace vr
             vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled,
             vk::MemoryPropertyFlagBits::eDeviceLocal,
             m_textureImage,
-            m_textureImageMemory
-        );
+            m_textureImageMemory);
 
         TransitionImageLayout(m_textureImage, vk::Format::eR8G8B8A8Srgb, vk::ImageLayout::eUndefined, vk::ImageLayout::eTransferDstOptimal);
         CopyBufferToImage(imageStagingBuffer, m_textureImage, static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight));
@@ -593,13 +602,11 @@ namespace vr
                 vertex.pos = {
                     attrib.vertices[3 * index.vertex_index + 0],
                     attrib.vertices[3 * index.vertex_index + 1],
-                    attrib.vertices[3 * index.vertex_index + 2]
-                };
+                    attrib.vertices[3 * index.vertex_index + 2]};
 
                 vertex.texCoord = {
                     attrib.texcoords[2 * index.texcoord_index + 0],
-                    attrib.texcoords[2 * index.texcoord_index + 1]
-                };
+                    attrib.texcoords[2 * index.texcoord_index + 1]};
 
                 vertex.color = {1.0f, 1.0f, 1.0f};
 
@@ -611,7 +618,7 @@ namespace vr
 
     void Vulkan::DrawFrame()
     {
-        m_logicalDevice->waitForFences(m_inFlightFences[m_currentFrame], VK_TRUE, UINT64_MAX);
+        VK_CHECK_FENCES_WAIT_RESULT(m_logicalDevice->waitForFences(m_inFlightFences[m_currentFrame], VK_TRUE, UINT64_MAX));
 
         auto& imageAvailableSemaphore = m_imageAvailableSemaphores[m_currentFrame];
         auto& renderFinishedSemaphore = m_renderFinishedSemaphores[m_currentFrame];
@@ -629,7 +636,7 @@ namespace vr
 
         if (m_imagesInFlight[imageIndex])
         {
-            m_logicalDevice->waitForFences(m_imagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
+            VK_CHECK_FENCES_WAIT_RESULT(m_logicalDevice->waitForFences(m_imagesInFlight[imageIndex], VK_TRUE, UINT64_MAX));
         }
         m_imagesInFlight[imageIndex] = m_inFlightFences[m_currentFrame];
 
@@ -768,8 +775,7 @@ namespace vr
                 vk::BufferUsageFlagBits::eUniformBuffer,
                 vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
                 m_uniformBuffers[i],
-                m_uniformBuffersMemory[i]
-            );
+                m_uniformBuffersMemory[i]);
         }
     }
 
@@ -842,8 +848,7 @@ namespace vr
         vk::MemoryAllocateInfo memoryAllocateInfo;
         memoryAllocateInfo.setAllocationSize(bufferMemoryRequirements.size);
         memoryAllocateInfo.setMemoryTypeIndex(
-            FindMemoryType(bufferMemoryRequirements.memoryTypeBits, properties)
-        );
+            FindMemoryType(bufferMemoryRequirements.memoryTypeBits, properties));
 
         bufferMemory = m_logicalDevice->allocateMemory(memoryAllocateInfo);
         m_logicalDevice->bindBufferMemory(buffer, bufferMemory, 0);
@@ -1012,8 +1017,7 @@ namespace vr
         return FindSupportedFormat(
             {vk::Format::eD32Sfloat, vk::Format::eD32SfloatS8Uint, vk::Format::eD24UnormS8Uint},
             vk::ImageTiling::eOptimal,
-            vk::FormatFeatureFlagBits::eDepthStencilAttachment
-        );
+            vk::FormatFeatureFlagBits::eDepthStencilAttachment);
     }
 
     vk::Format Vulkan::FindSupportedFormat(const std::vector<vk::Format>& candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags features)
@@ -1329,7 +1333,7 @@ namespace vr
         m_logicalDevice->destroyImageView(m_textureImageView);
         m_logicalDevice->destroyImage(m_textureImage);
         m_logicalDevice->freeMemory(m_textureImageMemory);
-        
+
         m_logicalDevice->destroyDescriptorSetLayout(m_descriptorSetLayout);
 
         m_logicalDevice->freeMemory(m_vertexBufferMemory);

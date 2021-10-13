@@ -1,0 +1,15 @@
+conan:
+  file_path: conan/conanfile.py
+  build_dir: conan/build
+targets:
+  app:
+    tests: false
+    namespace: vr
+    headers:
+      base_dir: include/VulkanRenderer
+      cmake_variable_file: src/VulkanRenderer/CMakeLists.txt
+      cmake_variable_name: PROJECT_HEADERS_LIST
+    sources:
+      base_dir: src/VulkanRenderer
+      cmake_variable_file: src/VulkanRenderer/CMakeLists.txt
+      cmake_variable_name: PROJECT_SRC_LIST
